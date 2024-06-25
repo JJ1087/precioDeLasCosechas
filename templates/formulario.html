@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clasificador de Insectos</title>
+    <title>Predicción del precio de las cosechas</title>
     <script>
-        function clasificarInsecto(event) {
+        function clasificarTrastorno(event) {
             event.preventDefault();
-            const abdomen = document.getElementById('abdomen').value;
-            const antena = document.getElementById('antena').value;
+            const CostCultivation = document.getElementById('CostCultivation').value;
+            const CostCultivation2 = document.getElementById('CostCultivation2').value;
+            const Yield = document.getElementById('Yield').value;
+            const RainFallAnnual = document.getElementById('RainFallAnnual').value;
 
             fetch('/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `abdomen=${abdomen}&antena=${antena}`,
+                body: `CostCultivation=${CostCultivation}&CostCultivation2=${CostCultivation2}&Yield=${Yield}&RainFallAnnual=${RainFallAnnual}`,
             })
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     document.getElementById('resultado').innerText = 'Error: ' + data.error;
                 } else {
-                    document.getElementById('resultado').innerText = 'El insecto es una ' + data.categoria;
+                    document.getElementById('resultado').innerText = 'Predicción del precio final del cultivo: ' + data.categoria;
                 }
             })
             .catch(error => {
@@ -31,12 +33,21 @@
     </script>
 </head>
 <body>
-    <h1>Clasificador de Insectos</h1>
-    <form id="formulario" onsubmit="clasificarInsecto(event)">
-        <label for="abdomen">Longitud del Abdomen:</label>
-        <input type="text" id="abdomen" name="abdomen"><br><br>
-        <label for="antena">Longitud de las Antenas:</label>
-        <input type="text" id="antena" name="antena"><br><br>
+    <h1>Clasificador de Trastornos del Sueño</h1>
+    <form id="formulario" onsubmit="clasificarTrastorno(event)">
+        <label for="CostCultivation">Costo del cultivo (proceso de siembra):</label>
+        <input type="text" id="CostCultivation" name="CostCultivation"><br><br>
+        
+        <label for="CostCultivation2">Costo del cultivo (proceso de cosecha):</label>
+        <input type="text" id="CostCultivation2" name="CostCultivation2"><br><br>
+
+        <label for="Yield">Produccion de cultivo:</label>
+        <input type="text" id="Yield" name="Yield"><br><br>
+        
+        <label for="RainFallAnnual">Precipitación Anual:</label>
+        <input type="text" id="RainFallAnnual" name="RainFallAnnual"><br><br>
+        
+        
         <input type="submit" value="Enviar">
     </form>
     <p id="resultado"></p>
